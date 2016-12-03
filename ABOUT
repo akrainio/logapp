@@ -1,2 +1,66 @@
-Write something about this app.
+Log Parser
+
+A web app that allows users to extract fragments from logs stored on the server.
+
+Suppose you are a developer who is trying to debug a server. The server is constantly generating logs and storing them,
+and you'd like to see what they say between two time stamps. However, these logs can be incredibly large and verbose,
+and scrolling through them manually is unpractical. This is where this web app comes in. It runs on the same machine
+where the logs are located, so it has direct access to them. After logging into the web app, you can give it two time
+stamps, which will cause the server to do two binary searches on the log (one to find the starting time stamp and the
+other to find the end stamp). Note that this requires the logs to have time stamps and consistent formatting. The server
+will then generate a new log that contains everything the logs had between the two time stamps. This new log will then
+be displayed, and you will also have the option to download it.
+
+UI
+
+(Assuming most of the optional features are implemented) The user would be first prompted to log in. The website would
+then list the different types of logs. Next to each type is a checkbox, which determine which types are to be searched.
+If at least one category is selected, then the user can then press the "Get Fragment" button at the bottom of the page.
+This causes a form to pop up, allowing the user to input a pairs of time stamps. Then the user can press "Submit", which
+will cause the binary searches to run. The website then loads a new page, display the generated log as well as a
+download button.
+
+Potential Difficulties
+
+The greatest difficulty will probably be the writing the time stamp parser. Different applications use different formats
+for time stamps (e.g. 2016/03/29:01:23:55.132 GMT vs 3:32:132), and if I want this web app to be genuinely useful, it
+should be possible to set it up so that it could parse custom time stamp formats. Additionally, log rollover may require
+a binary search to be run to find the logs that need to be parsed. This would almost certainly be more complex than the
+binary searches on the individual logs.
+
+Minimum Deliverable Entity
+
+At minimum, the server will only hold a single log, and the web app will be able to get two time stamps from a user,
+perform the binary searches the log, and allow the user to download the generated log fragment. Only a single time stamp
+format would be supported.
+
+Optional Features
+
+Custom time stamp support: Along with the log(s), the server will store a configuration file which allows the admin to
+specify the time stamp format the log uses (e.g. "%Y-%m-%d %H:%M:%S %z"), which the log parser would then be able to use.
+
+Log rollover support: Logs are often split into multiple files (e.g. the server might start writing into a new log file
+every hour). As such, it would make sense for the log parser to be able to generate fragments that were contained in two
+(or more) files. If there are a lot of files, then a binary search to find the appropriate files to parse may be
+appropriate.
+
+Multiple log types: A server might simultaneously write multiple logs which keep track of different things (e.g. access
+log and trace log). It would be nice to be able to choose which ones to search. The different types of logs would be
+stored in their respective directories. Each directory will be have its own configuration file. The web app UI would
+show the directories and the logs they contain.
+
+Log viewer: Allow the user to view the generated fragment in the web browser, rather than just being able to download
+it. Maybe also allow the user to view the stored logs as well.
+
+Log uploader: Allow the user to upload a log to the server.
+
+Multiple time stamp pairs support: Allow the user to input multiples pairs of time stamps, so the generated log would
+consist of multiple fragments.
+
+Download using custom time stamp format: Allow the user to replace the time stamps in the generated log with his own
+custom time stamps (useful if you don't need to the know the dates because you looking at only a few seconds)
+Remote upload: Allow a server remote server to automatically upload logs.
+
+Admin: allow some users to have special privileged, allowing them configuration files remotely.
+
 Developed with web2py.

@@ -3,20 +3,64 @@
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
-    var get_posts_url = "{{=URL('api', 'get_posts', user_signature=True)}}";
-    var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
-    var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
+    var upload_url = "{{=URL('api', 'upload_file')}}";
+</script>
+
+<script src="{{=URL('static', 'js/dropzone.js')}}"></script>
+
+<script>
+    function produce_upload_url (files) {
+        return upload_url;
+    }
+
+    $(function() {
+        Dropzone.options.fileUploader = {
+            maxFilesize: 10, // MB
+            url: produce_upload_url,
+            addRemoveLinks: true,
+            parallelUploads: 1,
+            acceptedFiles: '.log',
+            createImageThumbnails: false,
+            init: function() {
+                this.on("complete", function(file) {
+                    this.removeFile(file);
+                });
+            }
+        }
+    });
 </script>
 {{end}}
 
 <div class="main_content">
 
-    <div id="vue-div" class="display:none">
-        <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
+    <div id="uploader_div" class="dz_custom">
+        <form action=""
+              class="dropzone dz-clickable"
+              id="file-uploader">
+            <div class="dz-message">
+                Drop .log files here to upload them, or click to select them.
+            </div>
+        </form>
     </div>
 
+    <div id="vue-div" style="display:none">
+        <div class="form-container">
+            <div style="margin-left: 5%; margin-right: 5%" class="stamp-getter" id="stamp-start-form">
+                <form action="#" v-on:submit.prevent="get-start" class="form-horizontal" enctype="multipart/form-data" method="post">
+                    <div style="margin-bottom:10px; height:35px" class="form-group" id="table_content_row">
+                        <div>
+                            <input class="form-control string" id="table_content" v-model="form_content" placeholder="Write your comment here" type="text" />
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:0px" class="form-group" id="submit_record__row">
+                        <div style="padding-left: 15px;">
+                            <input class="post-button edit-row-button" id="add_post_submit" type="submit" value="Post"/>
+                            <input type="button" class="cancel-button btn btn-danger edit-row-button" value="Cancel" v-on:click="add_post_button()"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </div>
 </div>
-
-</div>
-
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
