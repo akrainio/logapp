@@ -14,16 +14,30 @@ var app = function() {
     };
 
 
+    self.get_stamps = function() {
+        // Add post request sent
+        $.post(get_stamps_url,
+            {
+                start_stamp: self.vue.start_stamp,
+                end_stamp: self.vue.end_stamp
+            },
+            function (data) {
+                console.log(data.parsed)
+            });
+    };
+
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
-            has_more: false
+            folders: [],
+            start_stamp: null,
+            end_stamp: null
         },
         methods: {
-            get_more: self.get_more
+            get_stamps: self.get_stamps
         }
 
     });

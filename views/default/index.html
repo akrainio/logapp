@@ -4,6 +4,8 @@
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var upload_url = "{{=URL('api', 'upload_file')}}";
+    var get_stamps_url = "{{=URL('api', 'get_stamps')}}";
+    var get_folders_url = "{{=URL('api', 'get_folders')}}";
 </script>
 
 <script src="{{=URL('static', 'js/dropzone.js')}}"></script>
@@ -45,22 +47,28 @@
 
     <div id="vue-div" style="display:none">
         <div class="form-container">
-            <div style="margin-left: 5%; margin-right: 5%" class="stamp-getter" id="stamp-start-form">
-                <form action="#" v-on:submit.prevent="get-start" class="form-horizontal" enctype="multipart/form-data" method="post">
-                    <div style="margin-bottom:10px; height:35px" class="form-group" id="table_content_row">
+            <div style="margin: 5%; width: 10%">
+                <form action="#" v-on:submit.prevent="get_stamps" enctype="multipart/form-data" method="post">
+                    <div style="margin-bottom:10px; height:35px" class="form-group">
                         <div>
-                            <input class="form-control string" id="table_content" v-model="form_content" placeholder="Write your comment here" type="text" />
-                            <span class="help-block"></span>
+                            <input class="form-control string" v-model="start_stamp" placeholder="Enter Start Stamp"
+                                   type="text" />
                         </div>
                     </div>
-                    <div style="margin-bottom:0px" class="form-group" id="submit_record__row">
-                        <div style="padding-left: 15px;">
-                            <input class="post-button edit-row-button" id="add_post_submit" type="submit" value="Post"/>
-                            <input type="button" class="cancel-button btn btn-danger edit-row-button" value="Cancel" v-on:click="add_post_button()"/>
+                    <div style="margin-bottom:10px; height:35px" class="form-group">
+                        <div>
+                            <input class="form-control string" v-model="end_stamp" placeholder="Enter End Stamp"
+                                   type="text" />
+                        </div>
+                    </div>
+                    <div style="margin-bottom:0" class="form-group">
+                        <div style="padding-left: 0;">
+                            <input type="submit" value="Get Log Fragment"/>
                         </div>
                     </div>
                 </form>
             </div>
+        </div>
     </div>
 </div>
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
