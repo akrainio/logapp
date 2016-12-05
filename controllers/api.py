@@ -2,7 +2,6 @@ import os
 import models.logreader
 
 
-@auth.requires_signature()
 def upload_file():
     # Uploads file to the logs folder
     path = os.path.join(request.folder, "logs", request.vars.file.filename)
@@ -27,6 +26,12 @@ def get_folders():
     if len(folders) == 0:
         db.folders.insert(folder="Default")
         folders.append("Default")
+
+        # Uncomment below to include large log file
+        # db.files.insert(
+        #     folder="Default",
+        #     filename="long.log"
+        # )
     return response.json(dict(folders=folders))
 
 
