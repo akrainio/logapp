@@ -9,16 +9,24 @@
 
 import datetime
 
-db.define_table('folders',
-                Field('dir', 'text'),
+db.define_table('files',
+                Field('folder', 'text'),
                 Field('filename', 'text'),
+                Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
+                Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
+                )
+db.define_table('folders',
+                Field('folder', 'text'),
                 Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
                 Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
                 )
 
 # I don't want to display the user email by default in all forms.
-db.folders.dir.requires = IS_NOT_EMPTY()
-db.folders.filename.requires = IS_NOT_EMPTY()
+db.files.folder.requires = IS_NOT_EMPTY()
+db.files.filename.requires = IS_NOT_EMPTY()
+db.files.created_on.readable = db.folders.created_on.writable = False
+db.files.updated_on.readable = db.folders.updated_on.writable = False
+db.folders.folder.requires = IS_NOT_EMPTY()
 db.folders.created_on.readable = db.folders.created_on.writable = False
 db.folders.updated_on.readable = db.folders.updated_on.writable = False
 

@@ -1,11 +1,69 @@
 .dz_custom {
-  width: 15%;
-  margin: auto;
+  width: 60%;
+  font-size: small;
+  margin: 0 0;
+  padding: 0 0;
+}
+.text-output {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: scroll;
+  width: 80%;
 }
 
+.description-text{
+  font-size: large;
+}
 
+.divider {
+  width: 42.4%;
+  margin: 2% 30%;
+  /*background-color: #1b3249;*/
+  border-top: dotted;
 
+}
+.form-container {
+  padding-left: 1%;
+  margin-top: 1%;
+  width: 11%;
+  display:inline-block;
+}
 
+.new_folder {
+  background-color: #4f80d2;
+  width: 100%;
+  font-size: small;
+}
+
+.get-log-btn {
+  background-color: green;
+  font-size: small;
+  width: 60%;
+}
+
+.cancel {
+  background-color: #ef5c0e;
+  width: 23%;
+  font-size: small;
+}
+
+.text-area-container {
+  width: 75%;
+}
+
+.create {
+  background-color: #4f80d2;
+  width: 23%;
+  font-size: small;
+}
+
+.result_table {
+  width: 60%;
+}
+
+.floating-box {
+    display: inline-block;
+}
 
 
 
@@ -434,7 +492,7 @@ div.table_footer span.pagine.disabled i.fa {
 
 /* line 84, ../sass/_dropzone.scss */
 .dropzone {
-  min-height: 150px;
+  min-height: 50px;
   border: 2px solid rgba(0, 0, 0, 0.3);
   background: white;
   padding: 20px 20px;
@@ -466,7 +524,7 @@ div.table_footer span.pagine.disabled i.fa {
 /* line 120, ../sass/_dropzone.scss */
 .dropzone .dz-message {
   text-align: center;
-  margin: 1.5em 0;
+  margin: 0 0;
 }
 /* line 125, ../sass/_dropzone.scss */
 .dropzone .dz-preview {
@@ -735,9 +793,9 @@ div.table_footer span.pagine.disabled i.fa {
 /* line 399, ../sass/_dropzone.scss */
 .dropzone {
   border: 2px dashed #4f80d2;
-  border-radius: 5px;
+  border-radius: 0;
   background: white;
-  width: 90%;
+  width: 100%;
   margin: 10px auto 20px auto;
 }
 /* line 405, ../sass/_dropzone.scss */

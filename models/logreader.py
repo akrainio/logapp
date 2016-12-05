@@ -59,7 +59,8 @@ class Logreader:
                 elif curr_time < time:
                     min_offset = curr_end
                 elif curr_time == time:
-                    return curr_start
+                    if is_start: return curr_start
+                    else: return curr_end
                 mid_offset = int((min_offset + max_offset) / 2)
                 curr_start, curr_end, curr_time = self.get_line_info(mid_offset, in_file)
             if is_start:
@@ -147,9 +148,11 @@ class Logreader:
                     mid_index = int(floor((min_index + max_index) / 2))
                 if cur_time[1] < target_time:
                     min_index = mid_index
-                    mid_index = int(ceil((min_index + max_index) / 2))
+                    mid_index = int(ceil(float(min_index + max_index) / 2))
                 if prev_mid == mid_index:
                     return mid_index
+        if files == []:
+            return []
         if start_stamp == '':
             cur_file = open(files[0], 'r')
             start_time = self.get_line_info(0, cur_file)[2]
@@ -164,14 +167,11 @@ class Logreader:
             end_time = self.get_time(end_stamp)
         start_file = find(start_time)
         end_file = find(end_time)
-        if start_file == end_file:
-            # if start_stamp == '' and end_stamp == '':
-            #     return self.parse_file([start_file])
-            # if start_stamp == '':
-            #     return self.parse_file(["-e", end_stamp, start_file])
-            # if end_stamp == '':
-            #     return self.parse_file(["-s", start_stamp, start_file])
-            return self.parse_file(["-s", start_stamp, "-e", end_stamp, files[start_file]])
-        else:
-            return self.parse_file(["-s", start_stamp, files[start_file]]) + self.parse_file(["-e", end_stamp, files[end_file]])
-
+        output = self.parse_file(["-s", start_stamp, files[start_file]])
+        i = start_file + 1
+        while i < end_file:
+            output += self.parse_file([files[i]])
+            i += 1
+        if start_file != end_file:
+            output += self.parse_file(["-e", end_stamp, files[end_file]])
+        return output

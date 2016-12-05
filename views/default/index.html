@@ -6,19 +6,19 @@
     var upload_url = "{{=URL('api', 'upload_file')}}";
     var get_stamps_url = "{{=URL('api', 'get_stamps')}}";
     var get_folders_url = "{{=URL('api', 'get_folders')}}";
+    var add_folder_url = "{{=URL('api', 'add_folder')}}";
+    var delete_folder_url = "{{=URL('api', 'delete_folder')}}";
+    var rename_folder_url = "{{=URL('api', 'rename_folder')}}";
 </script>
 
 <script src="{{=URL('static', 'js/dropzone.js')}}"></script>
 
 <script>
-    function produce_upload_url (files) {
-        return upload_url;
-    }
 
     $(function() {
         Dropzone.options.fileUploader = {
             maxFilesize: 10, // MB
-            url: produce_upload_url,
+            url: upload_url,
             addRemoveLinks: true,
             parallelUploads: 1,
             acceptedFiles: '.log',
@@ -27,46 +27,91 @@
                 this.on("complete", function(file) {
                     this.removeFile(file);
                 });
+                this.on("sending", function (file, xhr, formData) {
+                    formData.append('selected', window.APP.vue.get_selected())
+                })
             }
+
         }
     });
+
 </script>
 {{end}}
 
 <div class="main_content">
-
-    <div id="uploader_div" class="dz_custom">
-        <form action=""
-              class="dropzone dz-clickable"
-              id="file-uploader">
-            <div class="dz-message">
-                Drop .log files here to upload them, or click to select them.
-            </div>
-        </form>
-    </div>
-
     <div id="vue-div" style="display:none">
-        <div class="form-container">
-            <div style="margin: 5%; width: 10%">
-                <form action="#" v-on:submit.prevent="get_stamps" enctype="multipart/form-data" method="post">
-                    <div style="margin-bottom:10px; height:35px" class="form-group">
-                        <div>
-                            <input class="form-control string" v-model="start_stamp" placeholder="Enter Start Stamp"
-                                   type="text" />
-                        </div>
-                    </div>
-                    <div style="margin-bottom:10px; height:35px" class="form-group">
-                        <div>
-                            <input class="form-control string" v-model="end_stamp" placeholder="Enter End Stamp"
-                                   type="text" />
-                        </div>
-                    </div>
-                    <div style="margin-bottom:0" class="form-group">
-                        <div style="padding-left: 0;">
-                            <input type="submit" value="Get Log Fragment"/>
-                        </div>
+        <div style="margin-left: 30%">
+            <div id="uploader_div" class="dz_custom">
+                <form action=""
+                      class="dropzone dz-clickable"
+                      id="file-uploader">
+                    <div class="dz-message">
+                        Drop .log files here to upload them, or click to select them.
                     </div>
                 </form>
+            </div>
+
+            <div class="result_table">
+                <table>
+                    <thead>
+                    <tr style="color: white">
+                        <th style="width: 3%; background-color: #7f7f7f"></th>
+                        <th style="background-color: #7F7F7F">Folders</th>
+                        <th style="width: 15%; background-color: #7F7F7F"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(folder, index) in folders" v-bind:id="index">
+                        <td style="cursor: pointer;" v-on:click="select_folder(index)">
+                            <i v-if="!is_selected(index)" class="fa fa-circle-o"></i>
+                            <i v-if="is_selected(index)" class="fa fa-circle"></i>
+                        </td>
+                        <td style="cursor: pointer;" v-on:click="select_folder(index)">${folder}</td>
+                        <td style="float: right">
+                            <i class="fa fa-trash-o" style="cursor: pointer;" v-on:click="delete_folder(index)"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button  v-if="!namer" v-on:click="toggle_namer()" class="new_folder">New Folder</button>
+                <div v-if="namer">
+                    <form action="#" v-on:submit.prevent="mk_folder()" enctype="multipart/form-data" method="post">
+                        <span>
+                            <input class="form-control string" style="width: 50%; display: inline-block" v-model="new_folder_name" placeholder="Folder Name" type="text" />
+                            <input class="create" style="display: inline-block" type="submit" value="Create"/>
+                            <input class="cancel" style="display: inline-block" type="button" value="Cancel" v-on:click="toggle_namer()"/>
+                        </span>
+                        <div v-if="naming_failure">A folder with that name already exists!</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div style="margin-left: 30%">
+            <form action="#" v-on:submit.prevent="get_stamps" enctype="multipart/form-data" method="post">
+                <div>
+                    <p class="description-text">Starting Timestamp</p>
+                    <div>
+                        <input class="form-control" style="width: 60%" v-model="start_stamp" placeholder="YYYY-MM-DD HH:MM:SS.sss"
+                               type="text" />
+                    </div>
+                </div>
+                <div style="margin-top: 1%">
+                    <p class="description-text">Ending Timestamp</p>
+                    <div>
+                        <input class="form-control" style="width: 60%" v-model="end_stamp" placeholder="YYYY-MM-DD HH:MM:SS.sss"
+                               type="text" />
+                    </div>
+                </div>
+                <div>
+                    <div style="margin-top: 1%">
+                        <input type="submit" class="get-log-btn" value="Get Log Fragment"/>
+                    </div>
+                </div>
+            </form>
+            <div v-if="has_output" class="text-area-container">
+                <br>
+                <textarea id="output_area" class="text-output" rows="15" wrap="soft" readonly>${output}</textarea>
             </div>
         </div>
     </div>
