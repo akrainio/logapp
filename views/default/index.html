@@ -81,7 +81,7 @@
                             <input class="create" style="display: inline-block" type="submit" value="Create"/>
                             <input class="cancel" style="display: inline-block" type="button" value="Cancel" v-on:click="toggle_namer()"/>
                         </span>
-                        <div v-if="naming_failure">A folder with that name already exists!</div>
+                        <div v-if="naming_failure" style="color: red">A folder with that name already exists!</div>
                     </form>
                 </div>
             </div>

@@ -167,11 +167,13 @@ class Logreader:
             end_time = self.get_time(end_stamp)
         start_file = find(start_time)
         end_file = find(end_time)
-        output = self.parse_file(["-s", start_stamp, files[start_file]])
-        i = start_file + 1
-        while i < end_file:
-            output += self.parse_file([files[i]])
-            i += 1
-        if start_file != end_file:
+        if start_file == end_file:
+            output = self.parse_file(["-s", start_stamp, "-e", end_stamp, files[start_file]])
+        else:
+            output = self.parse_file(["-s", start_stamp, files[start_file]])
+            i = start_file + 1
+            while i < end_file:
+                output += self.parse_file([files[i]])
+                i += 1
             output += self.parse_file(["-e", end_stamp, files[end_file]])
         return output

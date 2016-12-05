@@ -35,7 +35,10 @@ var app = function() {
 
     self.toggle_namer = function () {
         self.vue.namer = !self.vue.namer;
-        if (!self.vue.namer) self.vue.naming_failure = false;
+        if (!self.vue.namer) {
+            self.vue.naming_failure = false;
+            self.vue.new_folder_name = null;
+        }
     };
 
     self.get_folders = function () {

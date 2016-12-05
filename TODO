@@ -1,0 +1,22 @@
+Bugs:
+    You can initiate a search on an empty folder
+        -Disable stamp entry forms if selected folder is empty
+            -Maybe display warning text "Folder is empty"
+    No handling of stamps outside of range
+
+
+Features:
+    Download file
+        -Maybe be able to name file before download
+
+    Custom time stamp pattern support
+        -Generic client side input?
+        -Folder specific
+    Folder list sorting
+    Folder renaming
+    Custom folder paths
+        -Client side ui?
+    Server side file adding
+    Admin
+        -Give users permissions
+            -Making/Renaming folders, Searching a folder, Uploading to a folder
